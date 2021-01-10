@@ -1,0 +1,13 @@
+server:
+  port: 10086
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/antd-access?serverTimezone=Asia/Shanghai
+    username: viki
+    password: abcd.123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
