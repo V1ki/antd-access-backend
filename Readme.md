@@ -27,12 +27,13 @@
 - [x] 14. 分配菜单的 E2E 测试. 视频地址: [https://www.bilibili.com/video/BV1Qi4y1P7pZ/](https://www.bilibili.com/video/BV1Qi4y1P7pZ/)
 - [x] 15. 阶段性总结及规划. 视频地址: [https://www.bilibili.com/video/BV1a5411A7TF/](https://www.bilibili.com/video/BV1a5411A7TF/)
 - [x] 16. 内存用户登录. 视频地址: [https://www.bilibili.com/video/BV1Ui4y1A7NK/](https://www.bilibili.com/video/BV1Ui4y1A7NK/)
-- [x] 17. 使用数据库的方式管理用户 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)    
-    
+- [x] 17. 使用数据库的方式管理用户 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)
+- [x] 18. 校验及测试 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)
 
 ### B 站 BV 号
 
 ```
+18. 校验及测试. BV1ZB4y1F7wy
 17. 使用数据库的方式管理用户. BV1aU4y1t7XA
 16. 内存用户登录. BV1Ui4y1A7NK
 15. 阶段性总结及规划. BV1a5411A7TF

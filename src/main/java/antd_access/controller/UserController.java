@@ -7,10 +7,13 @@ import antd_access.repository.db.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,8 +26,13 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public HandlerResp registerUser(@RequestBody UserReq userReq){
-
+    public HandlerResp registerUser(@Valid @RequestBody UserReq userReq, BindingResult result){
+        if(result.hasErrors()) {
+            return HandlerResp.failed(result.getAllErrors().get(0).getDefaultMessage());
+        }
+        if(userRepository.existsByUsername(userReq.getUsername())){
+            return HandlerResp.failed("用户名已存在!");
+        }
         User user = new User();
         user.setUsername(userReq.getUsername());
 
