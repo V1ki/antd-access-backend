@@ -4,6 +4,10 @@ import antd_access.model.db.User;
 import antd_access.model.req.user.UserReq;
 import antd_access.model.resp.HandlerResp;
 import antd_access.repository.db.UserRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,12 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
+@Api(tags = "User")
 public class UserController {
 
 
@@ -26,7 +32,12 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public HandlerResp registerUser(@Valid @RequestBody UserReq userReq, BindingResult result){
+    @ApiOperation(value = "register",notes = "注册用户")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "请求成功,但是不一定注册成功!")
+    })
+    public HandlerResp registerUser(@Valid @RequestBody UserReq userReq,
+                                   /* 忽略此参数 */ @ApiIgnore BindingResult result){
         if(result.hasErrors()) {
             return HandlerResp.failed(result.getAllErrors().get(0).getDefaultMessage());
         }

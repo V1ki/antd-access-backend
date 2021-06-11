@@ -29,10 +29,13 @@
 - [x] 16. 内存用户登录. 视频地址: [https://www.bilibili.com/video/BV1Ui4y1A7NK/](https://www.bilibili.com/video/BV1Ui4y1A7NK/)
 - [x] 17. 使用数据库的方式管理用户 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)
 - [x] 18. 校验及测试 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)
+- [x] 19. Swagger配置 . 视频地址: [https://www.bilibili.com/video/bv17h411a7oM](https://www.bilibili.com/video/bv17h411a7oM)
+    
 
 ### B 站 BV 号
 
 ```
+19. Swagger配置. bv17h411a7oM
 18. 校验及测试. BV1ZB4y1F7wy
 17. 使用数据库的方式管理用户. BV1aU4y1t7XA
 16. 内存用户登录. BV1Ui4y1A7NK
