@@ -28,7 +28,7 @@
 - [x] 15. 阶段性总结及规划. 视频地址: [https://www.bilibili.com/video/BV1a5411A7TF/](https://www.bilibili.com/video/BV1a5411A7TF/)
 - [x] 16. 内存用户登录. 视频地址: [https://www.bilibili.com/video/BV1Ui4y1A7NK/](https://www.bilibili.com/video/BV1Ui4y1A7NK/)
 - [x] 17. 使用数据库的方式管理用户 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)
-- [x] 18. 校验及测试 . 视频地址: [https://www.bilibili.com/video/BV1aU4y1t7XA/](https://www.bilibili.com/video/BV1aU4y1t7XA/)
+- [x] 18. 校验及测试 . 视频地址: [https://www.bilibili.com/video/BV1ZB4y1F7wy/](https://www.bilibili.com/video/BV1ZB4y1F7wy/)
 - [x] 19. Swagger配置 . 视频地址: [https://www.bilibili.com/video/bv17h411a7oM](https://www.bilibili.com/video/bv17h411a7oM)
     
 
