@@ -10,12 +10,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
@@ -24,6 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "User")
+@CrossOrigin
 public class UserController {
 
 
@@ -58,5 +57,13 @@ public class UserController {
 
         return HandlerResp.success("注册成功");
     }
+
+
+    @GetMapping("/current")
+    @ApiOperation(value = "获取当前用户",notes = "获取当前y已经登录的用户")
+    public HandlerResp fetchCurrentUser(@ApiIgnore @AuthenticationPrincipal User user) {
+        return HandlerResp.success("获取当前用户成功",user) ;
+    }
+
 
 }
