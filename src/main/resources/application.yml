@@ -10,6 +10,7 @@ spring:
     username: viki
     password: abcd.123456
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
       show-sql: true

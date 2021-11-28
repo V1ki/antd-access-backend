@@ -7,6 +7,7 @@ import antd_access.repository.db.UserRepository;
 import io.swagger.annotations.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
@@ -59,8 +61,9 @@ public class UserController {
 
 
     @GetMapping("/current")
-    @ApiOperation(value = "获取当前用户", notes = "获取当前y已经登录的用户")
+    @ApiOperation(value = "获取当前用户", notes = "获取当前已经登录的用户")
     public HandlerResp fetchCurrentUser(@ApiIgnore @AuthenticationPrincipal User user) {
+        log.info("user: {}", user);
         return HandlerResp.success("获取当前用户成功", user);
     }
 
