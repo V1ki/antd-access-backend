@@ -5,11 +5,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @ApiModel("Response")
 @AllArgsConstructor
-public class HandlerResp {
+public class HandlerResp<T> {
 
     public static final int CODE_SUCCESS = 0 ;
     public static final int CODE_FAILED = 1 ;
@@ -21,22 +22,28 @@ public class HandlerResp {
     private final String msg ;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Object data  ;
+    private T data  ;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private int total ;
 
     public HandlerResp(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static HandlerResp success(String msg) {
-        return new HandlerResp(CODE_SUCCESS, msg) ;
+    public static <T> HandlerResp<T> success(String msg) {
+        return new HandlerResp<>(CODE_SUCCESS, msg) ;
     }
-    public static HandlerResp success(String msg,Object data) {
-        return new HandlerResp(CODE_SUCCESS, msg, data) ;
+    public static <T>  HandlerResp<T> success(String msg,T data) {
+        return new HandlerResp<>(CODE_SUCCESS, msg, data,0) ;
+    }
+    public static <T>  HandlerResp<T> success(String msg,T data, int total) {
+        return new HandlerResp<>(CODE_SUCCESS, msg, data,total) ;
     }
 
-    public static HandlerResp failed(String msg) {
-        return new HandlerResp(CODE_FAILED, msg) ;
+    public static <T>  HandlerResp<T> failed(String msg) {
+        return new HandlerResp<>(CODE_FAILED, msg) ;
     }
 
 
