@@ -1,19 +1,22 @@
 package antd_access.controller;
 
 import antd_access.model.db.MenuEntity;
+import antd_access.model.db.UserEntity;
+import antd_access.model.req.menu.MenuParams;
 import antd_access.model.resp.HandlerResp;
 import antd_access.model.resp.MenuVO;
 import antd_access.services.MenuService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
+@Slf4j
 @Api(tags = "Menu")
 @RestController
 @RequiredArgsConstructor
@@ -21,19 +24,6 @@ import java.util.List;
 public class MenuController {
 
     private final MenuService menuService ;
-
-    @GetMapping("/home")
-    @ApiOperation(value = "home",notes = "测试请求")
-    @ApiResponses({
-            @ApiResponse(code = 200,message = "请求成功!"),
-            @ApiResponse(code = 401, message = "未登录!")
-    })
-    public String home(
-            @ApiParam(name ="index",value = "索引,主要用于balalalalala",defaultValue = "0")
-            @RequestParam(value = "index",defaultValue = "0") int index
-    ){
-        return "Hello SpringBoot" ;
-    }
 
     @GetMapping("/list")
     @ApiOperation(value = "fetchMenuList",notes = "获取菜单列表")
@@ -56,5 +46,33 @@ public class MenuController {
         List<MenuVO> voList = menuService.getCurrentMenu();
         return HandlerResp.success("",voList,voList.size());
     }
+
+
+
+    @ApiOperation(value ="创建menu",notes = "创建menu")
+    @PostMapping("/create")
+    public HandlerResp<Object> create(
+            @RequestBody MenuParams menuParams,
+            @ApiIgnore @AuthenticationPrincipal UserEntity userEntity
+    ){
+        log.info("create menu with:{}", userEntity.getUsername());
+        menuService.createMenu(menuParams);
+        return HandlerResp.success("");
+    }
+
+
+    @ApiOperation(value ="更新menu",notes = "更新menu")
+    @PostMapping("/{mid}")
+    public HandlerResp<MenuVO> create(
+            @PathVariable("mid") Long mid,
+            @RequestBody MenuParams menuParams,
+            @ApiIgnore @AuthenticationPrincipal UserEntity userEntity
+    ){
+        log.info("update menu with:{}", userEntity.getUsername());
+        menuService.updateMenu(menuParams);
+        return HandlerResp.success("");
+    }
+
+
 
 }
