@@ -1,7 +1,6 @@
 package antd_access.model.db;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +12,7 @@ import java.util.Collection;
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
 
     @Id

@@ -1,15 +1,14 @@
 package antd_access.services;
 
-import antd_access.model.db.User;
 import antd_access.repository.db.UserRepository;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@Data
+@RequiredArgsConstructor
 public class AntdUserDetailsService implements UserDetailsService {
 
     final UserRepository userRepository ;

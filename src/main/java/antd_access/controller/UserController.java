@@ -1,13 +1,13 @@
 package antd_access.controller;
 
-import antd_access.model.db.User;
+import antd_access.model.db.UserEntity;
 import antd_access.model.req.user.UserReq;
+import antd_access.model.req.user.UserVO;
 import antd_access.model.resp.HandlerResp;
 import antd_access.repository.db.UserRepository;
 import io.swagger.annotations.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +18,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
@@ -44,27 +43,28 @@ public class UserController {
         if (userRepository.existsByUsername(userReq.getUsername())) {
             return HandlerResp.failed("用户名已存在!");
         }
-        User user = new User();
-        user.setUsername(userReq.getUsername());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(userReq.getUsername());
 
         // 这样对吗? 直接保存明文密码,这样好吗?
 //        user.setPassword(  userReq.getPassword());
-        user.setPassword(passwordEncoder.encode(userReq.getPassword()));
+        userEntity.setPassword(passwordEncoder.encode(userReq.getPassword()));
 
-        user.setCreatedAt(System.currentTimeMillis());
-        user.setUpdatedAt(System.currentTimeMillis());
+        userEntity.setCreatedAt(System.currentTimeMillis());
+        userEntity.setUpdatedAt(System.currentTimeMillis());
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
         return HandlerResp.success("注册成功");
     }
 
 
     @GetMapping("/current")
-    @ApiOperation(value = "获取当前用户", notes = "获取当前已经登录的用户")
-    public HandlerResp fetchCurrentUser(@ApiIgnore @AuthenticationPrincipal User user) {
-        log.info("user: {}", user);
-        return HandlerResp.success("获取当前用户成功", user);
+    @ApiOperation(value = "获取当前用户", notes = "获取当前y已经登录的用户")
+    public HandlerResp<UserVO> fetchCurrentUser(@ApiIgnore @AuthenticationPrincipal UserEntity userEntity) {
+        return HandlerResp.success("获取当前用户成功",
+                UserVO.entityToVO(userEntity)
+        );
     }
 
     @PostMapping("/add")
@@ -78,13 +78,13 @@ public class UserController {
         if (userRepository.existsByUsername(userReq.getUsername())) {
             return HandlerResp.failed("用户名已存在!");
         }
-        User user = new User();
-        user.setUsername(userReq.getUsername());
-        user.setPassword(passwordEncoder.encode(userReq.getPassword()));
-        user.setCreatedAt(System.currentTimeMillis());
-        user.setUpdatedAt(System.currentTimeMillis());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(userReq.getUsername());
+        userEntity.setPassword(passwordEncoder.encode(userReq.getPassword()));
+        userEntity.setCreatedAt(System.currentTimeMillis());
+        userEntity.setUpdatedAt(System.currentTimeMillis());
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
         return HandlerResp.success("注册成功");
     }
@@ -102,14 +102,14 @@ public class UserController {
         if(!userRepository.existsByUsername(userReq.getUsername())){
             return HandlerResp.failed("用户名不存在!");
         }
-        User user = userRepository.findByUsername(username).orElse(null) ;
+        UserEntity userEntity = userRepository.findByUsername(username).orElse(null) ;
 
         // 这样对吗? 直接保存明文密码,这样好吗?
     //        user.setPassword(  userReq.getPassword());
-        user.setPassword( passwordEncoder.encode(userReq.getPassword()) );
-        user.setUpdatedAt(System.currentTimeMillis());
+        userEntity.setPassword( passwordEncoder.encode(userReq.getPassword()) );
+        userEntity.setUpdatedAt(System.currentTimeMillis());
 
-        userRepository.save(user) ;
+        userRepository.save(userEntity) ;
 
         return HandlerResp.success("注册成功");
     }
@@ -121,7 +121,7 @@ public class UserController {
     @ApiParam("页码") @RequestParam(value = "current",defaultValue = "1") int current,
     @ApiParam("页面容量") @RequestParam(value = "pageSize",defaultValue = "10") int pageSize
         ){
-        Page<User> users = userRepository.findAll(PageRequest.of(current- 1,pageSize));
+        Page<UserEntity> users = userRepository.findAll(PageRequest.of(current- 1,pageSize));
         return HandlerResp.success("获取用户成功",users.getContent());
     }
 

@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTest {
+public class UserEntityControllerTest {
 
     @LocalServerPort
     private int port ;

@@ -1,6 +1,6 @@
 package antd_access;
 
-import antd_access.model.db.User;
+import antd_access.model.db.UserEntity;
 import antd_access.model.req.menu.MenuParams;
 import antd_access.repository.db.UserRepository;
 import antd_access.services.MenuService;
@@ -18,17 +18,29 @@ public class AntdAccessApplication {
 	}
 
 
+	/**
+	 * 为了生成admin 进行测试.
+	 * @param userRepository userRepository
+	 * @param passwordEncoder passwordEncoder
+	 * @return CommandLineRunner
+	 */
 	@Bean
-	CommandLineRunner initUserData(UserRepository userRepository, PasswordEncoder passwordEncoder){
+	CommandLineRunner initRunner(UserRepository userRepository, PasswordEncoder passwordEncoder)	{
 		return args -> {
-			User user = new User();
-			user.setUsername("admin");
+			if(userRepository.existsByUsername("admin")) {
+				return;
+			}
+			UserEntity userEntity = new UserEntity();
+			userEntity.setUsername("admin");
 
-			user.setPassword(passwordEncoder.encode("Abcd1234"));
+			// 这样对吗? 直接保存明文密码,这样好吗?
+//        user.setPassword(  userReq.getPassword());
+			userEntity.setPassword(passwordEncoder.encode("Abcd1234"));
 
-			user.setCreatedAt(System.currentTimeMillis());
-			user.setUpdatedAt(System.currentTimeMillis());
-			userRepository.save(user);
+			userEntity.setCreatedAt(System.currentTimeMillis());
+			userEntity.setUpdatedAt(System.currentTimeMillis());
+
+			userRepository.save(userEntity);
 		};
 	}
 
@@ -79,5 +91,6 @@ public class AntdAccessApplication {
 			);
 		};
 	}
+
 
 }
