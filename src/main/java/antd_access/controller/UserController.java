@@ -1,12 +1,14 @@
 package antd_access.controller;
 
 import antd_access.model.db.UserEntity;
+import antd_access.model.db.UserRoleEntity;
+import antd_access.model.req.UserRoleParams;
 import antd_access.model.req.user.UserReq;
 import antd_access.model.req.user.UserVO;
 import antd_access.model.resp.HandlerResp;
 import antd_access.repository.db.UserRepository;
+import antd_access.repository.db.UserRoleRepository;
 import io.swagger.annotations.*;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,6 +30,7 @@ public class UserController {
 
 
     final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository ;
     final PasswordEncoder passwordEncoder;
 
 
@@ -135,5 +139,18 @@ public class UserController {
         return HandlerResp.success("删除用户成功");
     }
 
+
+    @PostMapping("/role")
+    @ApiOperation(value = "给用户分配角色",notes = "给用户分配角色")
+    public HandlerResp<String> assignRole(
+            @RequestBody UserRoleParams body,
+            @ApiIgnore @AuthenticationPrincipal UserEntity userEntity
+    ){
+        List<UserRoleEntity> userRoleEntities = body.toUserRoleEntityList(userEntity.getUid());
+
+        userRoleRepository.saveAll(userRoleEntities);
+
+        return HandlerResp.success("分配角色成功");
+    }
 
 }
