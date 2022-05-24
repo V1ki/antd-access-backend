@@ -1,7 +1,10 @@
 package antd_access.model.req.user;
 
+import antd_access.model.db.RoleEntity;
 import antd_access.model.db.UserEntity;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class UserVO {
@@ -16,6 +19,7 @@ public class UserVO {
 
     private long updatedAt ;
 
+    private List<RoleEntity> roleList ;
 
 
     public static UserVO entityToVO(UserEntity userEntity){

@@ -1,5 +1,6 @@
 package antd_access.controller;
 
+import antd_access.model.db.RoleEntity;
 import antd_access.model.db.UserEntity;
 import antd_access.model.db.UserRoleEntity;
 import antd_access.model.req.UserRoleParams;
@@ -66,9 +67,15 @@ public class UserController {
     @GetMapping("/current")
     @ApiOperation(value = "获取当前用户", notes = "获取当前y已经登录的用户")
     public HandlerResp<UserVO> fetchCurrentUser(@ApiIgnore @AuthenticationPrincipal UserEntity userEntity) {
-        return HandlerResp.success("获取当前用户成功",
-                UserVO.entityToVO(userEntity)
-        );
+
+        if(userEntity == null){
+            return HandlerResp.failed("用户未登录");
+        }
+        UserVO currentUser = UserVO.entityToVO(userEntity) ;
+        List<RoleEntity> roleEntityList = userRoleRepository.findAllRoleByUserId(userEntity.getUid());
+        currentUser.setRoleList(roleEntityList);
+
+        return HandlerResp.success("获取当前用户成功", currentUser );
     }
 
     @PostMapping("/add")

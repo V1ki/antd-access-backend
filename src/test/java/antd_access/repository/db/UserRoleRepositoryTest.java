@@ -1,11 +1,15 @@
 package antd_access.repository.db;
 
+import antd_access.model.db.RoleEntity;
 import antd_access.model.db.UserRoleEntity;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,4 +49,15 @@ class UserRoleRepositoryTest {
         assertEquals(1, userRoleRepository.count());
     }
 
+    @Order(3)
+    @Test
+    void findAllRoleByUserId() {
+        List<RoleEntity> roleEntityList  = userRoleRepository.findAllRoleByUserId(1);
+        assertEquals(1, roleEntityList.size());
+
+        Assertions.assertThat(roleEntityList.get(0))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("name", "admin1")
+        ;
+    }
 }
