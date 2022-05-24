@@ -1,7 +1,10 @@
 package antd_access;
 
+import antd_access.model.db.RoleEntity;
 import antd_access.model.db.UserEntity;
 import antd_access.model.req.menu.MenuParams;
+import antd_access.repository.db.MenuRepository;
+import antd_access.repository.db.RoleRepository;
 import antd_access.repository.db.UserRepository;
 import antd_access.services.MenuService;
 import org.springframework.boot.CommandLineRunner;
@@ -46,8 +49,11 @@ public class AntdAccessApplication {
 
 
 	@Bean
-	CommandLineRunner initMenuData(MenuService menuService){
+	CommandLineRunner initMenuData(MenuService menuService, MenuRepository menuRepository){
 		return args -> {
+			if(menuRepository.count() > 0) {
+				return;
+			}
 			menuService.createMenu(
 					MenuParams.builder()
 							.identifier("welcome")
@@ -93,4 +99,24 @@ public class AntdAccessApplication {
 	}
 
 
+
+	@Bean
+	CommandLineRunner initRole(RoleRepository roleRepository){
+		return args -> {
+			if(roleRepository.count() > 0) {
+				return;
+			}
+			RoleEntity roleEntity = new RoleEntity();
+			roleEntity.setId(1L);
+			roleEntity.setName("admin");
+			roleEntity.setIdentifier("admin");
+			roleEntity.setDescription("管理员");
+			roleEntity.setPriority(1);
+			roleEntity.setCreatedAt(System.currentTimeMillis());
+			roleEntity.setUpdatedAt(System.currentTimeMillis());
+
+			roleRepository.save(roleEntity);
+		};
+
+	}
 }
