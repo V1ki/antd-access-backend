@@ -8,8 +8,8 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Data
-@Entity
-@Table(uniqueConstraints = {
+@Entity(name = "User")
+@Table(name = "user",uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
 public class UserEntity implements UserDetails {
@@ -24,6 +24,13 @@ public class UserEntity implements UserDetails {
     private String password ;
 
     private String avatar ;
+
+    /**
+     * 最后一次登录生成的token
+     */
+    private String token ;
+
+    private Long lastLoginAt ;
 
     /**
      * 用户创建时间, timestamp .unix time

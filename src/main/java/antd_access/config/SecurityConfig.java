@@ -1,5 +1,6 @@
 package antd_access.config;
 
+import antd_access.model.db.UserEntity;
 import antd_access.model.resp.HandlerResp;
 import antd_access.services.AntdUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -60,6 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         response.setContentType("application/json");
                         ObjectMapper mapper = new ObjectMapper();
+                        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
+
+                        UserEntity resultUser =  userDetailsService.onLoginSuccess(userEntity.getUid(), request) ;
+
+                        Cookie cookie = new Cookie("token", resultUser.getToken()+":"+resultUser.getLastLoginAt());
+                        cookie.setMaxAge(60 * 5);
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
                         mapper.createGenerator(response.getOutputStream())
                                 .writeObject(HandlerResp.success("登陆成功!"));
 
@@ -74,6 +84,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .writeObject(HandlerResp.failed("登陆失败!"));
                     }
                 })
+                .and()
+                .logout()
+                .deleteCookies("token", "JSESSIONID")
+                .logoutUrl("/v1/logout")
+                .and()
+                .rememberMe()
+                .rememberMeServices(new CustomRememberMeServices(userDetailsService))
+                .key("remember-me-key")
 
                 .and()
                 .exceptionHandling(e ->
