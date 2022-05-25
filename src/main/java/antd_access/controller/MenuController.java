@@ -11,9 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
@@ -52,7 +55,7 @@ public class MenuController {
     @ApiOperation(value ="创建menu",notes = "创建menu")
     @PostMapping("/create")
     public HandlerResp<Object> create(
-            @RequestBody MenuParams menuParams,
+           @Valid @RequestBody MenuParams menuParams,
             @ApiIgnore @AuthenticationPrincipal UserEntity userEntity
     ){
         log.info("create menu with:{}", userEntity.getUsername());
@@ -65,7 +68,7 @@ public class MenuController {
     @PostMapping("/{mid}")
     public HandlerResp<MenuVO> create(
             @PathVariable("mid") Long mid,
-            @RequestBody MenuParams menuParams,
+            @Valid @RequestBody MenuParams menuParams,
             @ApiIgnore @AuthenticationPrincipal UserEntity userEntity
     ){
         log.info("update menu with:{}", userEntity.getUsername());

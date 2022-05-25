@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -40,11 +39,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功,但是不一定注册成功!")
     })
-    public HandlerResp registerUser(@Valid @RequestBody UserReq userReq,
-            /* 忽略此参数 */ @ApiIgnore BindingResult result) {
-        if (result.hasErrors()) {
-            return HandlerResp.failed(result.getAllErrors().get(0).getDefaultMessage());
-        }
+    public HandlerResp registerUser(@Valid @RequestBody UserReq userReq) {
         if (userRepository.existsByUsername(userReq.getUsername())) {
             return HandlerResp.failed("用户名已存在!");
         }
@@ -80,12 +75,8 @@ public class UserController {
 
     @PostMapping("/add")
     @ApiOperation(value = "增加用户", notes = "增加用户,需要增加用户操作的权限")
-    public HandlerResp addUser(@Valid @RequestBody UserReq userReq,
-            /* 忽略此参数 */ @ApiIgnore BindingResult result) {
+    public HandlerResp addUser(@Valid @RequestBody UserReq userReq) {
 
-        if (result.hasErrors()) {
-            return HandlerResp.failed(result.getAllErrors().get(0).getDefaultMessage());
-        }
         if (userRepository.existsByUsername(userReq.getUsername())) {
             return HandlerResp.failed("用户名已存在!");
         }
@@ -104,12 +95,7 @@ public class UserController {
     @ApiOperation(value = "修改用户",notes = "修改用户,需要增加修改用户的权限")
     public HandlerResp updateUser(
             @ApiParam("用户名") @PathVariable("username") String username,
-            @Valid @RequestBody UserReq userReq,
-            /* 忽略此参数 */ @ApiIgnore BindingResult result){
-
-        if(result.hasErrors()) {
-            return HandlerResp.failed(result.getAllErrors().get(0).getDefaultMessage());
-        }
+            @Valid @RequestBody UserReq userReq){
         if(!userRepository.existsByUsername(userReq.getUsername())){
             return HandlerResp.failed("用户名不存在!");
         }

@@ -28,18 +28,21 @@ public class CustomRememberMeServices implements RememberMeServices {
         Arrays.stream(request.getCookies())
                 .forEach(c -> log.info("cookie name : {} , value : {}", c.getName(),c.getValue()) );
 
-        Cookie tokenCookie = Arrays.stream(request.getCookies()).filter(c -> "token".equals(c.getName())).findFirst().orElseThrow(() -> new RuntimeException("not login!"));
+        Cookie tokenCookie = Arrays.stream(request.getCookies()).filter(c -> "token".equals(c.getName())).findFirst().orElse(null);
+        if(tokenCookie == null) {
+            return null;
+        }
         // token 中的value 结构为: token:lastLoginAt
 
         String[] token = tokenCookie.getValue().split(":");
         if(token.length != 2) {
-            throw new RuntimeException("token error");
+            return null;
         }
 
         UserEntity userEntity = userDetailsService.fetchUserByTokenAndLoginTime(token[0], Long.parseLong(token[1]));
 
         if(userEntity == null) {
-            throw new RuntimeException("token is invalid");
+            return null;
         }
 
         return new RememberMeAuthenticationToken("remember-me-key",userEntity, userEntity.getAuthorities());

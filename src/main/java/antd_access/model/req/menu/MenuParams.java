@@ -4,6 +4,8 @@ import antd_access.model.db.MenuEntity;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
+
 @Data
 @Builder
 public class MenuParams {
@@ -21,6 +23,7 @@ public class MenuParams {
 
     private boolean hide ;
 
+    @Min(value = 0,message = "排序值不能小于0")
     private int idx ;
 
 
