@@ -9,6 +9,4 @@ import java.util.List;
 
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
 
-    @Query("select r from UserRole ur, Role r where ur.userId = :userId and r.id = ur.roleId")
-    List<RoleEntity> findAllRoleByUserId(long userId);
 }

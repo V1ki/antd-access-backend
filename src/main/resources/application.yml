@@ -6,16 +6,22 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/antd-access?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/for_test?serverTimezone=Asia/Shanghai
     username: viki
     password: abcd.123456
   jpa:
     open-in-view: false
+    show-sql: true
     hibernate:
-      ddl-auto: 'update'
-      show-sql: true
+      ddl-auto: 'create-drop'
 
 
 logging:
   level:
     sql: debug
+    org:
+      springframework:
+        data: trace
+      hibernate:
+        type: trace
+        event: trace

@@ -20,6 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -67,8 +68,7 @@ public class UserController {
             return HandlerResp.failed("用户未登录");
         }
         UserVO currentUser = UserVO.entityToVO(userEntity) ;
-        List<RoleEntity> roleEntityList = userRoleRepository.findAllRoleByUserId(userEntity.getUid());
-        currentUser.setRoleList(roleEntityList);
+        currentUser.setRoleList(userEntity.getRoles().stream().map(UserRoleEntity::getRole).collect(Collectors.toList()));
 
         return HandlerResp.success("获取当前用户成功", currentUser );
     }
