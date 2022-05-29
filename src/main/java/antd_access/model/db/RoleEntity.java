@@ -4,6 +4,8 @@ package antd_access.model.db;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @Entity(name = "Role")
@@ -30,5 +32,9 @@ public class RoleEntity {
     private long createdAt ;
 
     private long updatedAt ;
+
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<RolePermissionEntity> permissions ;
 
 }

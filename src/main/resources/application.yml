@@ -12,10 +12,11 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: 'update'
+      ddl-auto: 'create-drop'
       show-sql: true
 
 
 logging:
   level:
     sql: debug
+    org.hibernate.type: trace

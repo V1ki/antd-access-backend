@@ -1,9 +1,11 @@
 package antd_access;
 
+import antd_access.model.db.PermissionEntity;
 import antd_access.model.db.RoleEntity;
 import antd_access.model.db.UserEntity;
 import antd_access.model.req.menu.MenuParams;
 import antd_access.repository.db.MenuRepository;
+import antd_access.repository.db.PermissionRepository;
 import antd_access.repository.db.RoleRepository;
 import antd_access.repository.db.UserRepository;
 import antd_access.services.MenuService;
@@ -119,4 +121,25 @@ public class AntdAccessApplication {
 		};
 
 	}
+
+	@Bean
+	CommandLineRunner initPermission(PermissionRepository permissionRepository) {
+		return args -> {
+			if(permissionRepository.count() > 0) {
+				return;
+			}
+			PermissionEntity permissionEntity = new PermissionEntity();
+			permissionEntity.setId(1L);
+			permissionEntity.setName("Create");
+			permissionEntity.setDescription("新增");
+			permissionRepository.save(permissionEntity);
+
+			permissionEntity = new PermissionEntity();
+			permissionEntity.setId(2L);
+			permissionEntity.setName("Update");
+			permissionEntity.setDescription("修改");
+			permissionRepository.save(permissionEntity);
+		};
+	}
+
 }
