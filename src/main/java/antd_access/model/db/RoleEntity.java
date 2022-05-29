@@ -1,13 +1,14 @@
 package antd_access.model.db;
 
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity(name = "Role")
 @Table(name = "role")
 public class RoleEntity {
@@ -37,4 +38,6 @@ public class RoleEntity {
     @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<RolePermissionEntity> permissions ;
 
+    @OneToMany(mappedBy = "role", cascade = {},fetch = FetchType.EAGER,orphanRemoval = true)
+    private Set<UserRoleEntity> users ;
 }

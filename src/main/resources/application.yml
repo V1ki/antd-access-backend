@@ -11,12 +11,17 @@ spring:
     password: abcd.123456
   jpa:
     open-in-view: false
+    show-sql: true
     hibernate:
       ddl-auto: 'create-drop'
-      show-sql: true
 
 
 logging:
   level:
     sql: debug
-    org.hibernate.type: trace
+    org:
+      springframework:
+        data: trace
+      hibernate:
+        type: trace
+        event: trace

@@ -1,43 +1,49 @@
 package antd_access.model.db;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity(name = "User")
-@Table(name = "user",uniqueConstraints = {
+@Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
 public class UserEntity implements UserDetails {
 
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private long uid ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long uid;
 
 
-    private String username ;
-    private String password ;
+    private String username;
+    private String password;
 
-    private String avatar ;
+    private String avatar;
 
     /**
      * 最后一次登录生成的token
      */
-    private String token ;
+    private String token;
 
-    private Long lastLoginAt ;
+    private Long lastLoginAt;
 
     /**
      * 用户创建时间, timestamp .unix time
      */
-    private long createdAt ;
+    private long createdAt;
 
-    private long updatedAt ;
+    private long updatedAt;
+
+    @OneToMany(mappedBy = "user",  cascade = { }, fetch = FetchType.EAGER,orphanRemoval = true)
+    private Set<UserRoleEntity> roles;
 
 
     @Override

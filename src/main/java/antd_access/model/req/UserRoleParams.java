@@ -1,5 +1,7 @@
 package antd_access.model.req;
 
+import antd_access.model.db.RoleEntity;
+import antd_access.model.db.UserEntity;
 import antd_access.model.db.UserRoleEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,8 +21,12 @@ public class UserRoleParams {
     public List<UserRoleEntity> toUserRoleEntityList(long uid){
         return roleIds.stream().map(roleId -> {
             UserRoleEntity userRoleEntity = new UserRoleEntity();
-            userRoleEntity.setUserId(uid);
-            userRoleEntity.setRoleId(roleId);
+            userRoleEntity.setUser(new UserEntity(){{
+                setUid(uid);
+            }});
+            userRoleEntity.setRole(new RoleEntity(){{
+                setId(roleId);
+            }});
             userRoleEntity.setCreatedAt(System.currentTimeMillis());
             return userRoleEntity;
         }).collect(Collectors.toList());
