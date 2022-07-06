@@ -13,15 +13,17 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: 'update'
 
 
 logging:
   level:
-    sql: debug
+    sql: info
     org:
       springframework:
-        data: trace
+        data: info
       hibernate:
-        type: trace
-        event: trace
+        type: info
+        event: info
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(---){faint} %clr([%5.15t]){faint} %clr(%-15.15logger{39}){cyan} %clr(:){faint} %m%n'

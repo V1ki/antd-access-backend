@@ -1,5 +1,6 @@
 package antd_access.model.resp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -24,8 +25,13 @@ public class HandlerResp<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data  ;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private int total ;
+
+    public HandlerResp(){
+        this.code = CODE_FAILED ;
+        this.msg = "" ;
+    }
 
     public HandlerResp(int code, String msg) {
         this.code = code;

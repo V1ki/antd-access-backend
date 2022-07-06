@@ -25,6 +25,9 @@ public class CustomRememberMeServices implements RememberMeServices {
 
     @Override
     public Authentication autoLogin(HttpServletRequest request, HttpServletResponse httpServletResponse) {
+        if( request.getCookies() == null) {
+            return null;
+        }
         Arrays.stream(request.getCookies())
                 .forEach(c -> log.info("cookie name : {} , value : {}", c.getName(),c.getValue()) );
 
