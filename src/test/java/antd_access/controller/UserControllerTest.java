@@ -90,5 +90,28 @@ class UserControllerTest {
         ;
     }
 
+    @Test
+    @DisplayName("登录状态下修改用户")
+    @WithUserDetails(value="admin", userDetailsServiceBeanName="antdUserDetailsService")
+    void updateUserWithUserDetail() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        UserReq userReq = new UserReq() ;
+        userReq.setPassword("Abcd1234");
+        userReq.setUsername("admin");
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/user/admin")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(userReq))
+                ;
+
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+        ;
+    }
+
 
 }
