@@ -39,7 +39,6 @@ class UserControllerMockTest {
     @DisplayName("未登录状态下获取当前用户Mock")
     void fetchCurrentUserNotLogin() throws Exception{
 
-
         when(userController.fetchCurrentUser(null)).thenReturn(
                 HandlerResp.success("Success",new UserVO(){{
                     setUsername("admin");
