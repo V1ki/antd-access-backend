@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -17,94 +19,150 @@ import org.springframework.http.ResponseEntity;
 public class UserEntityControllerTest {
 
     @LocalServerPort
-    private int port ;
+    private int port;
 
     @Autowired
-    private TestRestTemplate restTemplate ;
+    private TestRestTemplate restTemplate;
 
-    public ResponseEntity<HandlerResp> register(String username , String password) {
-        UserReq userReq = new UserReq(username,password);
-        String url = "http://localhost:"+port +"/api/user/register" ;
-        return restTemplate.postForEntity(url,userReq, HandlerResp.class) ;
-    }
+    public ResponseEntity<HandlerResp<String>> register(String username, String password) {
+        UserReq userReq = new UserReq(username, password);
+        HttpEntity<UserReq> request = new HttpEntity<>(userReq);
 
-    @Test
-    public void usernameIsV1(){
-        ResponseEntity<HandlerResp> resp =  register("v1","Abcd1234");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
-    }
+        String url = "http://localhost:" + port + "/api/user/register";
+        return restTemplate.exchange(
+                url,
+                org.springframework.http.HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<>() {
+                });
 
-    @Test
-    public void usernameIsSpec(){
-        ResponseEntity<HandlerResp> resp =  register("viki$","Abcd1234");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+//        return restTemplate.postForEntity(url,userReq, new ParameterizedTypeReference<HandlerResp<String>>() {}) ;
     }
 
     @Test
-    public void passwordLenght(){
-        ResponseEntity<HandlerResp> resp =  register("viki","12345");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void usernameIsV1() {
+        Assertions.assertThat(register("v1", "Abcd1234"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordNumber(){
-        ResponseEntity<HandlerResp> resp =  register("viki","12345678");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void usernameIsSpec() {
+        Assertions.assertThat(register("viki$", "Abcd1234"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordLowerLetter(){
-        ResponseEntity<HandlerResp> resp =  register("viki","abcdefgh");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void passwordLenght() {
+        Assertions.assertThat(register("viki", "12345"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordUpperLetter(){
-        ResponseEntity<HandlerResp> resp =  register("viki","ABCDEFGH");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void passwordNumber() {
+
+        Assertions.assertThat(register("viki", "12345678"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordUpperAndLowerLetter(){
-        ResponseEntity<HandlerResp> resp =  register("viki","ABCDefgh");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void passwordLowerLetter() {
+
+        Assertions.assertThat(register("viki", "abcdefgh"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordUpperAndNumberLetter(){
-        ResponseEntity<HandlerResp> resp =  register("viki","ABCD1234");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void passwordUpperLetter() {
+
+        Assertions.assertThat(register("viki", "ABCDEFGH"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordLowerAndNumberLetter(){
-        ResponseEntity<HandlerResp> resp =  register("viki","abcd1234");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void passwordUpperAndLowerLetter() {
+
+        Assertions.assertThat(register("viki", "ABCDefgh"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void passwordCorrectUserNameNotUnique(){
-        ResponseEntity<HandlerResp> resp =  register("viki","Abcd1234");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(1) ;
+    public void passwordUpperAndNumberLetter() {
+
+        Assertions.assertThat(register("viki", "ABCD1234"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
     }
+
     @Test
-    public void correct(){
-        ResponseEntity<HandlerResp> resp =  register("viki"+System.currentTimeMillis(),"Abcd1234");
-        log.info(String.valueOf(resp));
-        Assertions.assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-        Assertions.assertThat(resp.getBody().getCode()).isEqualTo(0) ;
+    public void passwordLowerAndNumberLetter() {
+        Assertions.assertThat(register("viki", "abcd1234"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
+    }
+
+    @Test
+    public void passwordCorrectUserNameNotUnique() {
+
+        Assertions.assertThat(register("admin", "Abcd1234"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.OK)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(1);
+    }
+
+    @Test
+    public void correct() {
+        Assertions.assertThat(register("viki" + System.currentTimeMillis(), "Abcd1234"))
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("statusCode", HttpStatus.OK)
+                .extracting(HttpEntity::getBody)
+                .isNotNull()
+                .extracting(HandlerResp::getCode)
+                .isEqualTo(0);
     }
 }
